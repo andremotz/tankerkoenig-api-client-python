@@ -139,6 +139,77 @@ Edit the script to change:
 - `STATION_ID`: The gas station ID to query
 - `API_KEY`: Your Tankerkoenig API key
 
+### diesel_price_logger.py
+
+A script for logging diesel prices of a specific gas station to InfluxDB. Can be used standalone (e.g., with cron) or in Kubernetes/Docker.
+
+**Standalone Usage:**
+```bash
+# Install dependencies
+pip install -r logger_requirements.txt
+
+# Set environment variables
+export TANKERKOENIG_API_KEY="your-api-key"
+export STATION_ID="00041450-0002-4444-8888-acdc00000002"
+export INFLUXDB_URL="http://localhost:8086"
+export INFLUXDB_ORG="my-org"
+export INFLUXDB_BUCKET="gas_prices"
+
+# Run the logger
+python diesel_price_logger.py
+```
+
+**With cron (Linux/macOS):**
+```bash
+# Add to crontab for hourly execution:
+# 0 * * * * cd /path/to/tankerkoenig-api-client-python && /usr/bin/python3 diesel_price_logger.py
+```
+
+**Environment Variables:**
+- `STATION_ID` (required): Gas station ID
+- `TANKERKOENIG_API_KEY` (required): API key
+- `INFLUXDB_URL` (required): InfluxDB URL
+- `INFLUXDB_ORG` (required): InfluxDB organization
+- `INFLUXDB_BUCKET` (optional): InfluxDB bucket name (default: `gas_prices`)
+- `INFLUXDB_TOKEN` (optional): InfluxDB authentication token
+
+**Docker Usage:**
+```bash
+# Build Docker image
+cd tankerkoenig-api-client-python
+kubernetes/docker/build.sh
+
+# Or manually:
+docker build -f kubernetes/docker/Dockerfile -t diesel-price-logger:latest .
+
+# Run container
+docker run --rm \
+  -e TANKERKOENIG_API_KEY="your-api-key" \
+  -e STATION_ID="00041450-0002-4444-8888-acdc00000002" \
+  -e INFLUXDB_URL="http://influxdb:8086" \
+  -e INFLUXDB_ORG="my-org" \
+  -e INFLUXDB_BUCKET="gas_prices" \
+  diesel-price-logger:latest
+```
+
+**Kubernetes Deployment:**
+```bash
+# 1. Create ConfigMap (adjust values in configmap.yaml)
+kubectl apply -f kubernetes/configmap.yaml
+
+# 2. Create Secret (copy secret.yaml.example and fill in your values)
+kubectl apply -f kubernetes/secret.yaml
+
+# 3. Deploy CronJob (runs hourly)
+kubectl apply -f kubernetes/cronjob.yaml
+
+# Check status
+kubectl get cronjob diesel-price-logger
+kubectl get jobs
+```
+
+For detailed Kubernetes setup instructions, see `kubernetes/README.md`.
+
 ### tankerkoenig_cli.py
 
 A production-ready command-line tool for querying gas station prices with flexible output formats.

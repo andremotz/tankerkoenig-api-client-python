@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: diesel-price-logger
+  namespace: default  # Anpassen falls nötig
+spec:
+  schedule: "0 * * * *"  # Jede Stunde (Cron-Syntax: Minute Stunde Tag Monat Wochentag)
+  successfulJobsHistoryLimit: 3  # Behalte 3 erfolgreiche Jobs
+  failedJobsHistoryLimit: 3  # Behalte 3 fehlgeschlagene Jobs
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: diesel-price-logger
+        spec:
+          containers:
+          - name: logger
+            image: your-registry/diesel-price-logger:latest  # Dein Docker-Image (siehe kubernetes/docker/)
+            imagePullPolicy: Always
+            env:
+            - name: STATION_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: logger-config
+                  key: station-id
+            - name: TANKERKOENIG_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: logger-secrets
+                  key: api-key
+            - name: INFLUXDB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: logger-config
+                  key: influxdb-url
+            - name: INFLUXDB_ORG
+              valueFrom:
+                configMapKeyRef:
+                  name: logger-config
+                  key: influxdb-org
+            - name: INFLUXDB_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: logger-config
+                  key: influxdb-bucket
+            - name: INFLUXDB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: logger-secrets
+                  key: influxdb-token
+                  optional: true  # Optional, falls kein Token benötigt wird
+            resources:
+              requests:
+                memory: "64Mi"
+                cpu: "50m"
+              limits:
+                memory: "128Mi"
+                cpu: "100m"
+          restartPolicy: OnFailure
+

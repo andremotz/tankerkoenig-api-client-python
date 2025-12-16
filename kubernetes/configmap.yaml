@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logger-config
+  namespace: default  # Anpassen falls nötig
+data:
+  station-id: "00041450-0002-4444-8888-acdc00000002"  # Deine Tankstellen-ID
+  influxdb-url: "http://influxdb:8086"  # InfluxDB URL (anpassen)
+  influxdb-org: "my-org"  # InfluxDB Organisation
+  influxdb-bucket: "gas_prices"  # InfluxDB Bucket Name
+
