@@ -9,18 +9,18 @@ Original Java implementation by [Stefan Hueg (Codengine)](https://github.com/cod
 Installation
 ============
 
-Install via pip:
+Install from source:
 
 ```bash
-pip install tankerkoenig-api-client
-```
-
-Or install from source:
-
-```bash
-git clone https://github.com/codengine/tankerkoenig-api-client-python
+git clone https://github.com/andremotz/tankerkoenig-api-client-python
 cd tankerkoenig-api-client-python
 pip install .
+```
+
+Or install directly from GitHub:
+
+```bash
+pip install git+https://github.com/andremotz/tankerkoenig-api-client-python.git
 ```
 
 Requirements
