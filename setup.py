@@ -32,4 +32,9 @@ setup(
     install_requires=[
         "requests>=2.25.0",
     ],
+    extras_require={
+        "dev": [
+            "pytest>=7.0.0",
+        ],
+    },
 )

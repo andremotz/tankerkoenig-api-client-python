@@ -23,7 +23,7 @@ SOFTWARE.
 """
 
 import re
-from typing import Collection
+from typing import Collection, Any
 
 from tankerkoenig.exceptions import RequestParamException
 
