@@ -210,6 +210,65 @@ kubectl get jobs
 
 For detailed Kubernetes setup instructions, see `kubernetes/README.md`.
 
+### FastAPI Docker Server
+
+Ein stateless FastAPI-Server für die Abfrage von Dieselpreisen über HTTP. Der Server läuft in Docker und verwendet die gleiche `tankerkoenig` Bibliothek wie die anderen Skripte.
+
+**Docker Compose Start:**
+```bash
+# Server starten
+cd docker
+docker-compose up -d
+
+# Server stoppen
+docker-compose down
+```
+
+**Docker Build & Run (manuell):**
+```bash
+# Image bauen
+docker build -f docker/Dockerfile -t tankerkoenig-api:latest .
+
+# Container starten
+docker run -d -p 8000:8000 --name tankerkoenig-api tankerkoenig-api:latest
+```
+
+**API Endpoints:**
+
+- `GET /` - Health-Check Endpoint
+  ```bash
+  curl http://localhost:8000/
+  ```
+
+- `POST /diesel-price` - Dieselpreis abrufen
+  ```bash
+  curl -X POST http://localhost:8000/diesel-price \
+    -H "Content-Type: application/json" \
+    -d '{
+      "station_id": "00041450-0002-4444-8888-acdc00000002",
+      "api_key": "your-api-key"
+    }'
+  ```
+
+**Response Format:**
+```json
+{
+  "price": 1.548,
+  "status": "open",
+  "station_id": "00041450-0002-4444-8888-acdc00000002",
+  "station_name": "Tankstelle Name"
+}
+```
+
+**Fehlerbehandlung:**
+- `400 Bad Request`: Ungültige Parameter oder API-Fehler
+- `500 Internal Server Error`: Server-Fehler
+
+**API-Dokumentation:**
+Nach dem Start ist die interaktive API-Dokumentation verfügbar unter:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
 ### tankerkoenig_cli.py
 
 A production-ready command-line tool for querying gas station prices with flexible output formats.
