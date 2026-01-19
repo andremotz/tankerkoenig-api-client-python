@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Tankerkoenig Package kopieren und installieren
 COPY tankerkoenig/ /app/tankerkoenig/
 COPY setup.py /app/
+COPY README.md /app/
 
 # Lokales Package installieren
 RUN pip install --no-cache-dir .
