@@ -216,12 +216,27 @@ Ein stateless FastAPI-Server für die Abfrage von Dieselpreisen über HTTP. Der 
 
 **Docker Compose Start:**
 ```bash
-# Server starten
+# Server im Hintergrund starten (detached mode)
 cd docker
 docker-compose up -d
 
+# Server im Vordergrund starten (Logs werden angezeigt)
+docker-compose up
+
 # Server stoppen
 docker-compose down
+
+# Server stoppen und Volumes entfernen
+docker-compose down -v
+
+# Logs anzeigen
+docker-compose logs -f
+
+# Status prüfen
+docker-compose ps
+
+# Server neu starten
+docker-compose restart
 ```
 
 **Docker Build & Run (manuell):**
