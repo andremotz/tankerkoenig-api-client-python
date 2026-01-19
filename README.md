@@ -265,6 +265,30 @@ docker run -d -p 8000:8000 --name tankerkoenig-api tankerkoenig-api:latest
     }'
   ```
 
+**Server testen:**
+
+Beispiel-Curl-Abfrage zum Testen des Servers:
+```bash
+# Health-Check testen
+curl http://localhost:8000/
+
+# Dieselpreis abrufen (ersetze YOUR_API_KEY mit deinem API-Key)
+curl -X POST http://localhost:8000/diesel-price \
+  -H "Content-Type: application/json" \
+  -d '{
+    "station_id": "00041450-0002-4444-8888-acdc00000002",
+    "api_key": "YOUR_API_KEY"
+  }'
+
+# Mit pretty-print (jq erforderlich)
+curl -X POST http://localhost:8000/diesel-price \
+  -H "Content-Type: application/json" \
+  -d '{
+    "station_id": "00041450-0002-4444-8888-acdc00000002",
+    "api_key": "YOUR_API_KEY"
+  }' | jq
+```
+
 **Response Format:**
 ```json
 {
