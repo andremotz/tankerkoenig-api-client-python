@@ -32,52 +32,52 @@ Requirements
 Virtual Environment Setup
 =========================
 
-Es wird empfohlen, ein virtuelles Python-Environment (venv) zu verwenden, um Abhängigkeiten isoliert zu verwalten.
+It is recommended to use a virtual Python environment (venv) to manage dependencies in isolation.
 
-**Venv einrichten und aktivieren:**
+**Setting up and activating venv:**
 
 ```bash
-# Repository klonen
+# Clone repository
 git clone https://github.com/andremotz/tankerkoenig-api-client-python
 cd tankerkoenig-api-client-python
 
-# Virtuelles Environment erstellen
+# Create virtual environment
 python3 -m venv venv
 
-# Environment aktivieren
-# Auf Linux/macOS:
+# Activate environment
+# On Linux/macOS:
 source venv/bin/activate
 
-# Auf Windows:
+# On Windows:
 venv\Scripts\activate
 ```
 
-**Package installieren:**
+**Installing the package:**
 
 ```bash
-# Package im venv installieren
+# Install package in venv
 pip install .
 
-# Oder mit Entwicklungs-Abhängigkeiten:
+# Or with development dependencies:
 pip install -e .
 ```
 
-**Skripte nativ ausführen:**
+**Running scripts natively:**
 
-Nach der Installation können die Python-Skripte direkt ausgeführt werden:
+After installation, Python scripts can be executed directly:
 
 ```bash
-# Beispiel: example_station_id.py
+# Example: example_station_id.py
 python example_station_id.py
 
-# Beispiel: example_radius_search.py
+# Example: example_radius_search.py
 python example_radius_search.py
 
-# Beispiel: tankerkoenig_cli.py
+# Example: tankerkoenig_cli.py
 export TANKERKOENIG_API_KEY="your-api-key"
 python tankerkoenig_cli.py --station-id "00041450-0002-4444-8888-acdc00000002"
 
-# Beispiel: diesel_price_logger.py (benötigt zusätzliche Abhängigkeiten)
+# Example: diesel_price_logger.py (requires additional dependencies)
 pip install -r logger_requirements.txt
 export TANKERKOENIG_API_KEY="your-api-key"
 export STATION_ID="00041450-0002-4444-8888-acdc00000002"
@@ -86,10 +86,10 @@ export INFLUXDB_ORG="my-org"
 python diesel_price_logger.py
 ```
 
-**Venv deaktivieren:**
+**Deactivating venv:**
 
 ```bash
-# Environment deaktivieren (wenn nicht mehr benötigt)
+# Deactivate environment (when no longer needed)
 deactivate
 ```
 
@@ -276,39 +276,39 @@ For detailed Kubernetes setup instructions, see `kubernetes/README.md`.
 
 ### FastAPI Docker Server
 
-Ein stateless FastAPI-Server für die Abfrage von Dieselpreisen über HTTP. Der Server läuft in Docker und verwendet die gleiche `tankerkoenig` Bibliothek wie die anderen Skripte.
+A stateless FastAPI server for querying diesel prices via HTTP. The server runs in Docker and uses the same `tankerkoenig` library as the other scripts.
 
 **Docker Compose Start:**
 ```bash
-# Server im Hintergrund starten (detached mode)
+# Start server in background (detached mode)
 cd docker
 docker-compose up -d
 
-# Server im Vordergrund starten (Logs werden angezeigt)
+# Start server in foreground (logs will be displayed)
 docker-compose up
 
-# Server stoppen
+# Stop server
 docker-compose down
 
-# Server stoppen und Volumes entfernen
+# Stop server and remove volumes
 docker-compose down -v
 
-# Logs anzeigen
+# View logs
 docker-compose logs -f
 
-# Status prüfen
+# Check status
 docker-compose ps
 
-# Server neu starten
+# Restart server
 docker-compose restart
 ```
 
-**Docker Build & Run (manuell):**
+**Docker Build & Run (manual):**
 ```bash
-# Image bauen
+# Build image
 docker build -f docker/Dockerfile -t tankerkoenig-api:latest .
 
-# Container starten
+# Start container
 docker run -d -p 8000:8000 --name tankerkoenig-api tankerkoenig-api:latest
 ```
 
@@ -319,7 +319,7 @@ docker run -d -p 8000:8000 --name tankerkoenig-api tankerkoenig-api:latest
   curl http://localhost:8000/
   ```
 
-- `POST /diesel-price` - Dieselpreis abrufen
+- `POST /diesel-price` - Get diesel price
   ```bash
   curl -X POST http://localhost:8000/diesel-price \
     -H "Content-Type: application/json" \
@@ -329,14 +329,14 @@ docker run -d -p 8000:8000 --name tankerkoenig-api tankerkoenig-api:latest
     }'
   ```
 
-**Server testen:**
+**Testing the server:**
 
-Beispiel-Curl-Abfrage zum Testen des Servers:
+Example curl queries to test the server:
 ```bash
-# Health-Check testen
+# Test health-check
 curl http://localhost:8000/
 
-# Dieselpreis abrufen (ersetze YOUR_API_KEY mit deinem API-Key)
+# Get diesel price (replace YOUR_API_KEY with your API key)
 curl -X POST http://localhost:8000/diesel-price \
   -H "Content-Type: application/json" \
   -d '{
@@ -344,7 +344,7 @@ curl -X POST http://localhost:8000/diesel-price \
     "api_key": "YOUR_API_KEY"
   }'
 
-# Mit pretty-print (jq erforderlich)
+# With pretty-print (jq required)
 curl -X POST http://localhost:8000/diesel-price \
   -H "Content-Type: application/json" \
   -d '{
@@ -359,16 +359,16 @@ curl -X POST http://localhost:8000/diesel-price \
   "price": 1.548,
   "status": "open",
   "station_id": "00041450-0002-4444-8888-acdc00000002",
-  "station_name": "Tankstelle Name"
+  "station_name": "Gas Station Name"
 }
 ```
 
-**Fehlerbehandlung:**
-- `400 Bad Request`: Ungültige Parameter oder API-Fehler
-- `500 Internal Server Error`: Server-Fehler
+**Error Handling:**
+- `400 Bad Request`: Invalid parameters or API error
+- `500 Internal Server Error`: Server error
 
-**API-Dokumentation:**
-Nach dem Start ist die interaktive API-Dokumentation verfügbar unter:
+**API Documentation:**
+After starting, interactive API documentation is available at:
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 
