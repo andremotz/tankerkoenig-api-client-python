@@ -29,6 +29,70 @@ Requirements
 - Python 3.7 or higher
 - requests library
 
+Virtual Environment Setup
+=========================
+
+Es wird empfohlen, ein virtuelles Python-Environment (venv) zu verwenden, um Abhängigkeiten isoliert zu verwalten.
+
+**Venv einrichten und aktivieren:**
+
+```bash
+# Repository klonen
+git clone https://github.com/andremotz/tankerkoenig-api-client-python
+cd tankerkoenig-api-client-python
+
+# Virtuelles Environment erstellen
+python3 -m venv venv
+
+# Environment aktivieren
+# Auf Linux/macOS:
+source venv/bin/activate
+
+# Auf Windows:
+venv\Scripts\activate
+```
+
+**Package installieren:**
+
+```bash
+# Package im venv installieren
+pip install .
+
+# Oder mit Entwicklungs-Abhängigkeiten:
+pip install -e .
+```
+
+**Skripte nativ ausführen:**
+
+Nach der Installation können die Python-Skripte direkt ausgeführt werden:
+
+```bash
+# Beispiel: example_station_id.py
+python example_station_id.py
+
+# Beispiel: example_radius_search.py
+python example_radius_search.py
+
+# Beispiel: tankerkoenig_cli.py
+export TANKERKOENIG_API_KEY="your-api-key"
+python tankerkoenig_cli.py --station-id "00041450-0002-4444-8888-acdc00000002"
+
+# Beispiel: diesel_price_logger.py (benötigt zusätzliche Abhängigkeiten)
+pip install -r logger_requirements.txt
+export TANKERKOENIG_API_KEY="your-api-key"
+export STATION_ID="00041450-0002-4444-8888-acdc00000002"
+export INFLUXDB_URL="http://localhost:8086"
+export INFLUXDB_ORG="my-org"
+python diesel_price_logger.py
+```
+
+**Venv deaktivieren:**
+
+```bash
+# Environment deaktivieren (wenn nicht mehr benötigt)
+deactivate
+```
+
 Obtaining an API Key
 =====================
 
